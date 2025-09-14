@@ -1,0 +1,23 @@
+Model SysADLModel ;
+
+package SysADL.types {
+    value type Int { }
+    value type Boolean { }   // <— corrigido
+    value type String { }
+    value type Void { }
+    value type Real { }
+}
+
+package newElement {
+    import SysADL.types ;
+
+    // REQ-01 – Identificação por NFC
+    Requirement REQ-01 – Identificação por NFC ( 1123 ) {
+        text = "O sistema deve identificar salas/locais através de leitura NFC."
+    }
+
+    // (Opcional) placeholder para o próximo requisito
+    Requirement newElement ( 123124 ) { }
+}
+
+style newElement { }
