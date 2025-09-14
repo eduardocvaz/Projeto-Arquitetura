@@ -1,0 +1,1 @@
+Model SysADLModel ; package SysADL.types { value type Int { } value type Bolean { } value type String { } value type Void { } value type Real { } } package newElement { import SysADL.types ; } Requirement newElement ( 1123 ) { } Requirement newElement ( 123124 ) { } style newElement { }
