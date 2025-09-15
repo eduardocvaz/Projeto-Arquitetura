@@ -1,0 +1,129 @@
+
+@startuml
+skinparam packageStyle rectangle
+skinparam class {
+  BorderColor #888
+  RoundCorner 8
+}
+
+package "req SysADLArchitecture — Funcionais" {
+
+' Guarda-chuva geral
+class "Requisitos Funcionais (RF)" as RF_ROOT <<requirement>> {
+  id = RF-ROOT
+  text = Capacidades funcionais do app/portal/kiosk.
+}
+
+' Requisito macro
+class "Identificação por NFC" as REQ01 <<requirement>> {
+  id = REQ-01
+  text = Identificar salas/locais por leitura NFC.
+}
+
+' --- Leitura e Identificação ---
+class "RF-01 — Ler Tag NFC" as RF01 <<requirement>> {
+  id = RF-01
+  text = Lê UID/payload NFC e identifica o local (≤1s offline; ≤2s online).
+}
+class "RF-02 — Anúncio por Voz/Háptico" as RF02 <<requirement>> {
+  id = RF-02
+  text = Anuncia por voz e retorno háptico; botão repetir.
+}
+class "RF-03 — Fallback Offline" as RF03 <<requirement>> {
+  id = RF-03
+  text = Sem internet, exibe/anuncia nome curto gravado na tag.
+}
+
+' --- Consulta e Conteúdo ---
+class "RF-04 — Consultar Detalhes do Local (API)" as RF04 <<requirement>> {
+  id = RF-04
+  text = Recupera andar, bloco, acessibilidade, observações e contato.
+}
+class "RF-05 — Busca Rápida" as RF05 <<requirement>> {
+  id = RF-05
+  text = Autocomplete com ≤5 sugestões em ≤300ms (cache).
+}
+
+' --- Navegação e Orientação ---
+class "RF-06 — Rotas Simples" as RF06 <<requirement>> {
+  id = RF-06
+  text = Instruções curtas priorizando caminhos acessíveis.
+}
+class "RF-07 — Avisos Contextuais" as RF07 <<requirement>> {
+  id = RF-07
+  text = Alerta sobre manutenção/obstáculos cadastrados.
+}
+
+' --- Administração & Operação ---
+class "RF-08 — Portal Admin (CRUD Locais/Tags)" as RF08 <<requirement>> {
+  id = RF-08
+  text = Criar/editar locais, gerar payloads e registrar status.
+}
+class "RF-09 — Provisionamento de Tags" as RF09 <<requirement>> {
+  id = RF-09
+  text = Emitir payload assinado (versão, validade, checksum).
+}
+class "RF-10 — Gerir Conteúdo de Áudio" as RF10 <<requirement>> {
+  id = RF-10
+  text = Subir áudios TTS pré-gerados para storage/CDN.
+}
+class "RF-11 — Notificações" as RF11 <<requirement>> {
+  id = RF-11
+  text = Enviar push/SMS/E-mail para mudanças relevantes.
+}
+class "RF-12 — Auditoria Básica" as RF12 <<requirement>> {
+  id = RF-12
+  text = Registrar quem alterou locais/tags (data/hora, ação).
+}
+
+' --- Sincronização & Kiosk ---
+class "RF-13 — Pacotes Offline" as RF13 <<requirement>> {
+  id = RF-13
+  text = App/kiosk baixam deltas de dados e áudios por campus.
+}
+class "RF-14 — Kiosk Acessível" as RF14 <<requirement>> {
+  id = RF-14
+  text = Totem com NFC, alto-falante, saída para fone, botão grande.
+}
+class "RF-15 — Beacons/QR Redundantes" as RF15 <<requirement>> {
+  id = RF-15
+  text = Permitir leitura por BLE/QR quando NFC indisponível.
+}
+
+' --- Compositions (grupo/guarda-chuva) ---
+RF_ROOT *-- RF01
+RF_ROOT *-- RF02
+RF_ROOT *-- RF03
+RF_ROOT *-- RF04
+RF_ROOT *-- RF05
+RF_ROOT *-- RF06
+RF_ROOT *-- RF07
+RF_ROOT *-- RF08
+RF_ROOT *-- RF09
+RF_ROOT *-- RF10
+RF_ROOT *-- RF11
+RF_ROOT *-- RF12
+RF_ROOT *-- RF13
+RF_ROOT *-- RF14
+RF_ROOT *-- RF15
+
+' Requisito macro → filhos
+REQ01 *-- RF01 : «composition»
+REQ01 *-- RF02 : «composition»
+REQ01 *-- RF03 : «composition»
+
+' Dependências (derive)
+RF04 ..> REQ01 : «derive»
+RF05 ..> RF04  : «derive»
+RF06 ..> RF04  : «derive»
+RF07 ..> RF06  : «derive»
+RF09 ..> RF08  : «derive»
+RF10 ..> RF08  : «derive»
+RF11 ..> RF08  : «derive»
+RF12 ..> RF08  : «derive»
+RF13 ..> RF04  : «derive»
+RF14 ..> RF13 : «derive»
+RF15 ..> RF01 : «derive»
+
+}
+@enduml

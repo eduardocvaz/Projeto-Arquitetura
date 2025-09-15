@@ -1,0 +1,142 @@
+
+
+@startuml
+skinparam packageStyle rectangle
+skinparam class {
+  BorderColor #888
+  RoundCorner 8
+}
+
+package "req SysADLArchitecture — Não Funcionais" {
+
+class "Requisitos Não Funcionais (RNF)" as RNF_ROOT <<requirement>> {
+  id = RNF-ROOT
+  text = Qualidades de desempenho, segurança, confiabilidade, etc.
+}
+
+' --- Desempenho & Disponibilidade ---
+class "RNF-01 — Latência App→Resposta (P95)" as RNF01 <<requirement>> {
+  id = RNF-01
+  text = ≤300ms em cache; ≤2s para TTS não-cachado.
+}
+class "RNF-02 — Disponibilidade API" as RNF02 <<requirement>> {
+  id = RNF-02
+  text = 99,9% mensal; orçamento de erros controlado.
+}
+class "RNF-03 — Tempo de Fallback Offline" as RNF03 <<requirement>> {
+  id = RNF-03
+  text = Anúncio local em ≤1s (payload na tag).
+}
+
+' --- Escalabilidade ---
+class "RNF-04 — Escala Horizontal" as RNF04 <<requirement>> {
+  id = RNF-04
+  text = Serviços stateless/autoscaling; picos 10x.
+}
+class "RNF-05 — Cache Hit Ratio" as RNF05 <<requirement>> {
+  id = RNF-05
+  text = ≥80% nas rotas de leitura frequentes.
+}
+
+' --- Segurança & Privacidade ---
+class "RNF-06 — Assinatura de Tags" as RNF06 <<requirement>> {
+  id = RNF-06
+  text = Payload assinado (HMAC/Ed25519); rejeitar não-assinadas.
+}
+class "RNF-07 — Transporte Seguro" as RNF07 <<requirement>> {
+  id = RNF-07
+  text = TLS 1.2+ em todas as comunicações.
+}
+class "RNF-08 — LGPD" as RNF08 <<requirement>> {
+  id = RNF-08
+  text = Sem dados pessoais por padrão; telemetria anônima e opt-in.
+}
+class "RNF-09 — Gestão de Chaves" as RNF09 <<requirement>> {
+  id = RNF-09
+  text = Rotação anual/por incidente; CRL de revogação.
+}
+
+' --- Confiabilidade & Resiliência ---
+class "RNF-10 — Operação Offline" as RNF10 <<requirement>> {
+  id = RNF-10
+  text = Identificação e anúncio curto sem internet.
+}
+class "RNF-11 — Retentativas & Timeout" as RNF11 <<requirement>> {
+  id = RNF-11
+  text = Timeout ≤2s, 2 retentativas exponenciais, circuit breaker.
+}
+class "RNF-12 — Recuperação de Falhas" as RNF12 <<requirement>> {
+  id = RNF-12
+  text = RTO ≤4h, RPO ≤15min para dados críticos do portal.
+}
+
+' --- Modificabilidade & Manutenibilidade ---
+class "RNF-13 — APIs Versionadas" as RNF13 <<requirement>> {
+  id = RNF-13
+  text = Compatibilidade retroativa mínima de 6 meses por versão.
+}
+class "RNF-14 — Documentação" as RNF14 <<requirement>> {
+  id = RNF-14
+  text = OpenAPI/Swagger atualizado em cada release.
+}
+class "RNF-15 — Cobertura de Testes" as RNF15 <<requirement>> {
+  id = RNF-15
+  text = ≥70% nos serviços core; smoke tests em produção.
+}
+
+' --- Usabilidade & Acessibilidade ---
+class "RNF-16 — Acessibilidade no App" as RNF16 <<requirement>> {
+  id = RNF-16
+  text = TalkBack/VoiceOver, tamanhos dinâmicos, contraste adequado.
+}
+class "RNF-17 — Normas" as RNF17 <<requirement>> {
+  id = RNF-17
+  text = ABNT NBR 9050 e WCAG 2.1 AA.
+}
+
+' --- Observabilidade ---
+class "RNF-18 — Métricas e Logs" as RNF18 <<requirement>> {
+  id = RNF-18
+  text = Métricas (latência, erro, cache hit) + logs estruturados; tracing básico.
+}
+class "RNF-19 — Alertas" as RNF19 <<requirement>> {
+  id = RNF-19
+  text = Alertas por SLO violado e quedas de disponibilidade.
+}
+
+' --- Compatibilidade & Localização ---
+class "RNF-20 — Compatibilidade Dispositivos" as RNF20 <<requirement>> {
+  id = RNF-20
+  text = Android (NFC) e iOS suportado; PT-BR com i18n futuro.
+}
+
+' Compositions
+RNF_ROOT *-- RNF01
+RNF_ROOT *-- RNF02
+RNF_ROOT *-- RNF03
+RNF_ROOT *-- RNF04
+RNF_ROOT *-- RNF05
+RNF_ROOT *-- RNF06
+RNF_ROOT *-- RNF07
+RNF_ROOT *-- RNF08
+RNF_ROOT *-- RNF09
+RNF_ROOT *-- RNF10
+RNF_ROOT *-- RNF11
+RNF_ROOT *-- RNF12
+RNF_ROOT *-- RNF13
+RNF_ROOT *-- RNF14
+RNF_ROOT *-- RNF15
+RNF_ROOT *-- RNF16
+RNF_ROOT *-- RNF17
+RNF_ROOT *-- RNF18
+RNF_ROOT *-- RNF19
+RNF_ROOT *-- RNF20
+
+' Relações de derivação (exemplos úteis)
+RNF01 ..> RNF05 : «derive»   ' latência depende de cache
+RNF03 ..> RNF10 : «derive»   ' tempo de fallback implica operação offline
+RNF04 ..> RNF02 : «derive»   ' escala ajuda disponibilidade
+RNF07 ..> RNF02 : «derive»   ' segurança no transporte impacta SLO
+RNF12 ..> RNF02 : «derive»   ' recuperação sustenta disponibilidade
+}
+@enduml
