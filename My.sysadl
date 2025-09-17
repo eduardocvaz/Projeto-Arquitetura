@@ -1,1 +1,27 @@
-Model SysADLModel ; package SysADL.types { value type Int { } value type Bolean { } value type String { } value type Void { } value type Real { } } package newElement { import SysADL.types ; } Requirement newElement ( 1123 ) { } Requirement newElement ( 123124 ) { } style newElement { }
+Model SysADLModel ;
+
+package SysADL.types {
+    value type Int { }
+    value type Boolean { }   // <— corrigido
+    value type String { }
+    value type Void { }
+    value type Real { }
+}
+
+package newElement {
+    import SysADL.types ;
+
+    
+
+    
+component def TAG { }
+	component def newElement { }
+	component def SMARTPHONE { } }
+
+    
+
+    Requirement AvisosContextuais ( RF08 ) { text = "Alerta sobre manutenção/obstáculos cadastrados" derive RotasSimples ; }
+
+    
+
+    Requirement RotasSimples ( RF07 ) { text = "Instruções curtas priorizando caminhos acessíveis" derive ConsultarDetalhesLocal ; } Requirement Auditoria ( RF13 ) { text = "Registrar quem alterou locais/tags (data/hora, ação)" derive PortalAdmin ; } Requirement BuscaRapida ( RF06 ) { text = "Autocomplete com ≤5 sugestões em ≤300ms (cache)" derive ConsultarDetalhesLocal ; } Requirement ConsultarDetalhesLocal ( RF05 ) { text = "Recupera andar, bloco, acessibilidade, observações e contato" derive IdentificacaoNFC ; } Requirement IdentificacaoNFC ( RF01 ) { text = "Identificar salas/locais por leitura NFC" Requirement LerTagNFC ( RF02 ) { text = " Lê UID/payload NFC e identifica o local (≤1s offline; ≤2s online)" satisfied by newElement.TAG , newElement.SMARTPHONE ; derive ProvisionamentoTags ; } Requirement AnuncioVoz ( RF03 ) { text = "Anuncia por voz e retorno háptico; botão repetir" satisfied by newElement.SMARTPHONE ; } Requirement FallbackOffline ( RF04 ) { text = "Sem internet, exibe/anuncia nome curto gravado na tag" satisfied by newElement.SMARTPHONE ; } } Requirement ProvisionamentoTags ( RF10 ) { text = " Emitir payload assinado (versão, validade, checksum)" satisfied by newElement.TAG ; derive PortalAdmin ; } Requirement PortalAdmin ( RF09 ) { text = "Criar/editar locais, gerar payloads e registrar status" } Requirement GerirConteudoAudio ( RF11 ) { text = "Subir áudios TTS pré-gerados para storage/CDN" derive PortalAdmin ; } Requirement Notificacoes ( RF12 ) { text = "Enviar push/SMS/E-mail para mudanças relevantes" derive PortalAdmin ; } Requirement BleQrRedundantes ( RF14 ) { text = " Permitir leitura por BLE/QR quando NFC indisponível" satisfied by newElement.SMARTPHONE ; derive IdentificacaoNFC.LerTagNFC ; }
